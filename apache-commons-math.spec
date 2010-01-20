@@ -21,7 +21,6 @@ BuildRequires:  maven-doxia-sitetools
 BuildRequires:  maven-plugin-bundle
 BuildRequires:  maven-surefire-maven-plugin
 BuildRequires:  maven-surefire-provider-junit4
-BuildRequires:  maven2
 BuildRequires:  maven2-plugin-antrun
 BuildRequires:  maven2-plugin-assembly
 BuildRequires:  maven2-plugin-compiler
@@ -103,6 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jan 20 2010 ELMORABITY Mohamed <melmorabity@fedoraproject.org> 2.0-5
+- Drop duplicate BuildRequires maven2
+
 * Fri Jan  8 2010 ELMORABITY Mohamed <melmorabity@fedoraproject.org> 2.0-4
 - Update description
 - Add ASL 1.1 and BSD to License tag
