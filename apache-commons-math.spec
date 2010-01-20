@@ -3,7 +3,7 @@
 
 Name:           apache-commons-math
 Version:        2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java library of lightweight mathematics and statistics components
 
 Group:          Development/Libraries
