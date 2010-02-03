@@ -3,7 +3,7 @@
 
 Name:           apache-commons-math
 Version:        2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Java library of lightweight mathematics and statistics components
 
 Group:          Development/Libraries
@@ -31,6 +31,8 @@ BuildRequires:  maven2-plugin-javadoc
 BuildRequires:  maven2-plugin-resources
 Requires:       java >= 1:1.6.0
 Requires:       jpackage-utils
+Requires(post): jpackage-utils
+Requires(postun):jpackage-utils
 BuildArch:      noarch
 
 %description
@@ -91,9 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
-%{_datadir}/maven2/poms
+%{_mavenpomdir}/*
 %{_javadir}/*.jar
-%{_mavendepmapfragdir}
+%{_mavendepmapfragdir}/*
 
 
 %files javadoc
@@ -102,6 +104,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb  3 2010 ELMORABITY Mohamed <melmorabity@fedoraproject.org> 2.0-6
+- Add missing %%post/%%postun Requires
+- Use macro %%{_mavendepmapfragdir} instead of %%{_datadir}/maven2/pom
+- Unown directories %%{_mavenpomdir} and %%{_mavendepmapfragdir}
+
 * Wed Jan 20 2010 ELMORABITY Mohamed <melmorabity@fedoraproject.org> 2.0-5
 - Drop duplicate BuildRequires maven2
 
