@@ -3,7 +3,7 @@
 
 Name:             apache-%{short_name}
 Version:          2.1
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -26,7 +26,8 @@ BuildRequires:    maven-jar-plugin
 BuildRequires:    maven-javadoc-plugin
 BuildRequires:    maven-plugin-bundle
 BuildRequires:    maven-resources-plugin
-BuildRequires:    maven-surefire-plugin
+#Should be replaced by maven-surefire-plugin after f15 branch
+BuildRequires:    maven-surefire-maven-plugin
 BuildRequires:    maven-surefire-provider-junit4
 Requires:         java >= 1:1.6.0
 Requires:         jpackage-utils
@@ -108,6 +109,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Fri Oct 22 2010 Chris Spike <chris.spike@arcor.de> 2.1-2
+- Fixed maven-surefire-plugin BR for F14
+
 * Fri Oct 22 2010 Chris Spike <chris.spike@arcor.de> 2.1-1
 - Updated to 2.1
 - Removed dependency on main package for -javadoc subpackage
