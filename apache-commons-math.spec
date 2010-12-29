@@ -3,7 +3,7 @@
 
 Name:             apache-%{short_name}
 Version:          2.1
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -67,9 +67,8 @@ rm -rf %{buildroot}
 
 # jars
 install -d -m 0755 %{buildroot}%{_javadir}
-install -pm 644 target/%{short_name}-%{version}.jar %{buildroot}%{_javadir}/%{name}-%{version}.jar
-(cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|apache-||g"`; done)
-(cd %{buildroot}%{_javadir} && for jar in *-%{version}*; do ln -sf ${jar} `echo $jar| sed  "s|-%{version}||g"`; done)
+install -pm 644 target/%{short_name}-%{version}.jar %{buildroot}%{_javadir}/%{name}.jar
+(cd %{buildroot}%{_javadir} && for jar in *; do ln -sf ${jar} `echo $jar| sed  "s|apache-||g"`; done)
 
 # pom
 install -d -m 755 %{buildroot}%{_mavenpomdir}
@@ -77,9 +76,8 @@ install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{short_name}.pom
 %add_to_maven_depmap org.apache.commons %{short_name} %{version} JPP %{short_name}
 
 # javadoc
-install -d -m 0755 %{buildroot}%{_javadocdir}/%{name}-%{version}
-cp -pr target/site/api*/* %{buildroot}%{_javadocdir}/%{name}-%{version}/
-ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
+install -d -m 0755 %{buildroot}%{_javadocdir}/%{name}
+cp -pr target/site/api*/* %{buildroot}%{_javadocdir}/%{name}/
 
 
 %clean
@@ -93,6 +91,13 @@ rm -rf %{buildroot}
 %postun
 %update_maven_depmap
 
+
+%pre javadoc
+# workaround for rpm bug, can be removed in F-17
+[ $1 -gt 1 ] && [ -L %{_javadocdir}/%{name} ] && \
+rm -rf $(readlink -f %{_javadocdir}/%{name}) %{_javadocdir}/%{name} || :
+
+
 %files
 %defattr(-,root,root,-)
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
@@ -103,12 +108,14 @@ rm -rf %{buildroot}
 %files javadoc
 %defattr(-,root,root,-)
 %doc LICENSE.txt
-%{_javadocdir}/%{name}-%{version}
 %{_javadocdir}/%{name}
 
 
 
 %changelog
+* Wed Dec 29 2010 Mat Booth <fedora@matbooth.co.uk> 2.1-3
+- Drop versioned jars and javadocs, fixes F15 upgrade path.
+
 * Fri Oct 22 2010 Chris Spike <chris.spike@arcor.de> 2.1-2
 - Fixed maven-surefire-plugin BR for F14
 
