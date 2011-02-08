@@ -3,7 +3,7 @@
 
 Name:             apache-%{short_name}
 Version:          2.1
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -113,6 +113,9 @@ rm -rf $(readlink -f %{_javadocdir}/%{name}) %{_javadocdir}/%{name} || :
 
 
 %changelog
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Wed Dec 29 2010 Mat Booth <fedora@matbooth.co.uk> 2.1-3
 - Drop versioned jars and javadocs, fixes F15 upgrade path.
 
