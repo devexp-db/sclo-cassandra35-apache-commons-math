@@ -2,15 +2,15 @@
 %global short_name commons-%{base_name}
 
 Name:             apache-%{short_name}
-Version:          2.1
-Release:          4%{?dist}
+Version:          2.2
+Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
 URL:              http://commons.apache.org/%{base_name}/
 Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
-Patch0:           %{short_name}-remove-clirr-from-pom.patch
+Patch0:           %{name}-2.2-remove_clirr_from_pom.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    java-devel >= 1:1.6.0
@@ -26,7 +26,7 @@ BuildRequires:    maven-jar-plugin
 BuildRequires:    maven-javadoc-plugin
 BuildRequires:    maven-plugin-bundle
 BuildRequires:    maven-resources-plugin
-#Should be replaced by maven-surefire-plugin after f15 branch
+# Should be replaced by maven-surefire-plugin after f15 branch
 BuildRequires:    maven-surefire-maven-plugin
 BuildRequires:    maven-surefire-provider-junit4
 Requires:         java >= 1:1.6.0
@@ -52,7 +52,7 @@ This package contains the API documentation for %{name}.
 
 %prep
 %setup -q -n %{short_name}-%{version}-src
-%patch0 -p0
+%patch0 -p1 -b .remove_clirr_from_pom
 
 
 %build
@@ -113,6 +113,9 @@ rm -rf $(readlink -f %{_javadocdir}/%{name}) %{_javadocdir}/%{name} || :
 
 
 %changelog
+* Thu Mar 10 2011 Mohamed El Morabity <melmorabity@fedoraproject.org> - 2.2-1
+- Update to 2.2
+
 * Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 

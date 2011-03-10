@@ -1,13 +1,14 @@
---- pom.xml	2010-10-22 03:37:42.930470377 +0200
-+++ pom.xml	2010-10-22 03:38:07.199469768 +0200
-@@ -269,17 +269,6 @@
+diff -up commons-math-2.2-src/pom.xml.orig commons-math-2.2-src/pom.xml
+--- commons-math-2.2-src/pom.xml.orig	2011-02-26 19:14:36.000000000 +0100
++++ commons-math-2.2-src/pom.xml	2011-03-10 15:05:36.988244002 +0100
+@@ -280,17 +280,6 @@
              </descriptors>
            </configuration>
          </plugin>
 -        <plugin>
 -          <groupId>org.codehaus.mojo</groupId>
 -          <artifactId>clirr-maven-plugin</artifactId>
--          <version>2.2.2</version>
+-          <version>2.3</version>
 -          <executions>
 -            <execution>
 -              <goals>
@@ -16,18 +17,18 @@
 -          </executions>
 -        </plugin>
        </plugins>
-   </build>
-   <reporting>
-@@ -324,14 +313,6 @@
+       <resources>
+         <resource>
+@@ -350,14 +339,6 @@
            <headerFile>${basedir}/license-header.txt</headerFile>
          </configuration>
        </plugin>
 -      <plugin>
 -        <groupId>org.codehaus.mojo</groupId>
 -        <artifactId>clirr-maven-plugin</artifactId>
--        <version>2.2.2</version>
+-        <version>2.2.3</version>
 -        <configuration>
--          <minSeverity>info</minSeverity>
+-          <minSeverity>${minSeverity}</minSeverity>
 -         </configuration>
 -      </plugin>
      </plugins>
