@@ -3,7 +3,7 @@
 
 Name:             apache-%{short_name}
 Version:          2.2
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -11,28 +11,20 @@ License:          ASL 1.1 and ASL 2.0 and BSD
 URL:              http://commons.apache.org/%{base_name}/
 Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
 Patch0:           %{name}-2.2-remove_clirr_from_pom.patch
-BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
-BuildRequires:    junit4
-BuildRequires:    maven2 >= 2.2.1
-BuildRequires:    maven-antrun-plugin
-BuildRequires:    maven-assembly-plugin
+BuildRequires:    maven
 BuildRequires:    maven-compiler-plugin
-BuildRequires:    maven-idea-plugin
 BuildRequires:    maven-install-plugin
 BuildRequires:    maven-jar-plugin
 BuildRequires:    maven-javadoc-plugin
-BuildRequires:    maven-plugin-bundle
+BuildRequires:    maven-release-plugin
 BuildRequires:    maven-resources-plugin
-# Should be replaced by maven-surefire-plugin after f15 branch
-BuildRequires:    maven-surefire-maven-plugin
+BuildRequires:    maven-surefire-plugin
 BuildRequires:    maven-surefire-provider-junit4
 Requires:         java >= 1:1.6.0
 Requires:         jpackage-utils
-Requires(post):   jpackage-utils
-Requires(postun): jpackage-utils
 BuildArch:        noarch
 
 %description
@@ -56,63 +48,44 @@ This package contains the API documentation for %{name}.
 
 
 %build
-export MAVEN_REPO_LOCAL=$(pwd)/.m2/repository
-mkdir -p $MAVEN_REPO_LOCAL
-mvn-jpp \
-    -Dmaven.repo.local=$MAVEN_REPO_LOCAL \
-    install javadoc:javadoc
+mvn-rpmbuild install javadoc:javadoc
+
 
 %install
-rm -rf %{buildroot}
-
 # jars
-install -d -m 0755 %{buildroot}%{_javadir}
-install -pm 644 target/%{short_name}-%{version}.jar %{buildroot}%{_javadir}/%{name}.jar
-(cd %{buildroot}%{_javadir} && for jar in *; do ln -sf ${jar} `echo $jar| sed  "s|apache-||g"`; done)
+install -Dpm 0644 target/%{short_name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
+pushd $RPM_BUILD_ROOT%{_javadir}/
+ln -s %{name}.jar %{short_name}.jar
+popd
 
 # pom
-install -d -m 755 %{buildroot}%{_mavenpomdir}
-install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{short_name}.pom
-%add_to_maven_depmap org.apache.commons %{short_name} %{version} JPP %{short_name}
+install -dm 0755 $RPM_BUILD_ROOT%{_mavenpomdir}/
+install -pm 0644 pom.xml $RPM_BUILD_ROOT%{_mavenpomdir}/JPP-%{name}.pom
+%add_maven_depmap JPP-%{name}.pom %{name}.jar
 
 # javadoc
-install -d -m 0755 %{buildroot}%{_javadocdir}/%{name}
-cp -pr target/site/api*/* %{buildroot}%{_javadocdir}/%{name}/
-
-
-%clean
-rm -rf %{buildroot}
-
-
-%post
-%update_maven_depmap
-
-
-%postun
-%update_maven_depmap
-
-
-%pre javadoc
-# workaround for rpm bug, can be removed in F-17
-[ $1 -gt 1 ] && [ -L %{_javadocdir}/%{name} ] && \
-rm -rf $(readlink -f %{_javadocdir}/%{name}) %{_javadocdir}/%{name} || :
+install -dm 0755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}
+cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
 
 %files
-%defattr(-,root,root,-)
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
 %{_javadir}/*
 %{_mavenpomdir}/*
 %{_mavendepmapfragdir}/*
 
+
 %files javadoc
-%defattr(-,root,root,-)
 %doc LICENSE.txt
 %{_javadocdir}/%{name}
 
 
-
 %changelog
+* Mon Jan 16 2012 Mohamed El Morabity <melmorabity@fedoraproject.org> - 2.2-3
+- Add missing apache-rat-plugin dependency
+- Use Maven 3
+- Spec cleanup
+
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
