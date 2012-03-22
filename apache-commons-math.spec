@@ -1,27 +1,19 @@
 %global base_name math
-%global short_name commons-%{base_name}
+%global short_name commons-%{base_name}3
 
-Name:             apache-%{short_name}
-Version:          2.2
-Release:          3%{?dist}
+Name:             apache-commons-math
+Version:          3.0
+Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
 URL:              http://commons.apache.org/%{base_name}/
 Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
-Patch0:           %{name}-2.2-remove_clirr_from_pom.patch
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
 BuildRequires:    maven
-BuildRequires:    maven-compiler-plugin
-BuildRequires:    maven-install-plugin
-BuildRequires:    maven-jar-plugin
-BuildRequires:    maven-javadoc-plugin
-BuildRequires:    maven-release-plugin
-BuildRequires:    maven-resources-plugin
-BuildRequires:    maven-surefire-plugin
 BuildRequires:    maven-surefire-provider-junit4
 Requires:         java >= 1:1.6.0
 Requires:         jpackage-utils
@@ -44,7 +36,6 @@ This package contains the API documentation for %{name}.
 
 %prep
 %setup -q -n %{short_name}-%{version}-src
-%patch0 -p1 -b .remove_clirr_from_pom
 
 
 %build
@@ -52,18 +43,13 @@ mvn-rpmbuild install javadoc:javadoc
 
 
 %install
-# jars
 install -Dpm 0644 target/%{short_name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
-pushd $RPM_BUILD_ROOT%{_javadir}/
-ln -s %{name}.jar %{short_name}.jar
-popd
+ln -s %{name}.jar $RPM_BUILD_ROOT%{_javadir}/%{short_name}.jar
 
-# pom
 install -dm 0755 $RPM_BUILD_ROOT%{_mavenpomdir}/
 install -pm 0644 pom.xml $RPM_BUILD_ROOT%{_mavenpomdir}/JPP-%{name}.pom
 %add_maven_depmap JPP-%{name}.pom %{name}.jar
 
-# javadoc
 install -dm 0755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
@@ -81,6 +67,9 @@ cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
 
 %changelog
+* Thu Mar 22 2012 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.0-1
+- Update to 3.0
+
 * Mon Jan 16 2012 Mohamed El Morabity <melmorabity@fedoraproject.org> - 2.2-3
 - Add missing apache-rat-plugin dependency
 - Use Maven 3
