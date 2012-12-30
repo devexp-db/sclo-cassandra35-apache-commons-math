@@ -2,8 +2,8 @@
 %global short_name commons-%{base_name}3
 
 Name:             apache-commons-math
-Version:          3.0
-Release:          2%{?dist}
+Version:          3.1
+Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -39,7 +39,7 @@ This package contains the API documentation for %{name}.
 
 
 %build
-mvn-rpmbuild install javadoc:javadoc
+mvn-rpmbuild install javadoc:aggregate
 
 
 %install
@@ -67,6 +67,9 @@ cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
 
 %changelog
+* Sun Dec 30 2012 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.1-1
+- Update to 3.1
+
 * Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
