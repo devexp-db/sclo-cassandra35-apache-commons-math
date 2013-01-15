@@ -2,7 +2,7 @@
 %global short_name commons-%{base_name}3
 
 Name:             apache-commons-math
-Version:          3.1
+Version:          3.1.1
 Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
@@ -67,6 +67,9 @@ cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
 
 %changelog
+* Tue Jan 15 2013 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.1.1-1
+- Update to 3.1.1
+
 * Sun Dec 30 2012 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.1-1
 - Update to 3.1
 
