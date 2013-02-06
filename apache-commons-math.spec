@@ -3,7 +3,7 @@
 
 Name:             apache-commons-math
 Version:          3.1.1
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 
 Group:            Development/Libraries
@@ -13,7 +13,7 @@ Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
-BuildRequires:    maven
+BuildRequires:    maven-local
 BuildRequires:    maven-surefire-provider-junit4
 Requires:         java >= 1:1.6.0
 Requires:         jpackage-utils
@@ -67,6 +67,10 @@ cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
 
 
 %changelog
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 3.1.1-2
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
+
 * Tue Jan 15 2013 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.1.1-1
 - Update to 3.1.1
 
