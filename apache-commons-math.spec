@@ -1,15 +1,13 @@
-%global base_name math
-%global short_name commons-%{base_name}3
+%global short_name commons-math3
 
 Name:             apache-commons-math
 Version:          3.2
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
-
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
-URL:              http://commons.apache.org/%{base_name}/
-Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
+URL:              http://commons.apache.org/math/
+Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%{version}-src.tar.gz
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
@@ -23,7 +21,6 @@ Commons Math is a library of lightweight, self-contained mathematics and
 statistics components addressing the most common problems not available in the
 Java programming language or Commons Lang.
 
-
 %package javadoc
 Summary:          Javadoc for %{name}
 Group:            Documentation
@@ -31,40 +28,29 @@ Group:            Documentation
 %description javadoc
 This package contains the API documentation for %{name}.
 
-
 %prep
 %setup -q -n %{short_name}-%{version}-src
 
+# Compatibility links
+%mvn_alias "org.apache.commons:%{short_name}" "%{short_name}:%{short_name}"
+%mvn_file :%{short_name} %{short_name} %{name}
 
 %build
-mvn-rpmbuild install javadoc:aggregate
-
+%mvn_build
 
 %install
-install -Dpm 0644 target/%{short_name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
-ln -s %{name}.jar $RPM_BUILD_ROOT%{_javadir}/%{short_name}.jar
+%mvn_install
 
-install -dm 0755 $RPM_BUILD_ROOT%{_mavenpomdir}/
-install -pm 0644 pom.xml $RPM_BUILD_ROOT%{_mavenpomdir}/JPP-%{name}.pom
-%add_maven_depmap JPP-%{name}.pom %{name}.jar
-
-install -dm 0755 $RPM_BUILD_ROOT%{_javadocdir}/%{name}
-cp -pr target/site/api*/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}/
-
-
-%files
+%files -f .mfiles
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
-%{_javadir}/*
-%{_mavenpomdir}/*
-%{_mavendepmapfragdir}/*
 
-
-%files javadoc
-%doc LICENSE.txt
-%{_javadocdir}/%{name}
-
+%files javadoc -f .mfiles-javadoc
+%doc LICENSE.txt NOTICE.txt
 
 %changelog
+* Tue Aug 06 2013 Mat Booth <fedora@matbooth.co.uk> - 3.2-3
+- Update for newer guidelines
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
