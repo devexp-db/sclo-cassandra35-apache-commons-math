@@ -2,7 +2,7 @@
 
 Name:             apache-commons-math
 Version:          3.2
-Release:          3%{?dist}
+Release:          4%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
@@ -12,7 +12,6 @@ Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
 BuildRequires:    maven-local
-Requires:         java >= 1:1.6.0
 Requires:         jpackage-utils
 BuildArch:        noarch
 
@@ -48,6 +47,9 @@ This package contains the API documentation for %{name}.
 %doc LICENSE.txt NOTICE.txt
 
 %changelog
+* Fri Mar 28 2014 Michael Simacek <msimacek@redhat.com> - 3.2-4
+- Use Requires: java-headless rebuild (#1067528)
+
 * Tue Aug 06 2013 Mat Booth <fedora@matbooth.co.uk> - 3.2-3
 - Update for newer guidelines
 
