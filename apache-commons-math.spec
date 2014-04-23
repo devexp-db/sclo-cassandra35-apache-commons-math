@@ -8,6 +8,15 @@ Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
 URL:              http://commons.apache.org/math/
 Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%{version}-src.tar.gz
+# Fix RHBZ #1084441 (Fix BOBYQAOptimizerTest failing tests; see also
+# https://issues.apache.org/jira/browse/MATH-1057)
+Patch0:           %{name}-3.2-RHBZ1084441.patch
+# commons-math doesn't reimplement (yet) in
+# org.apache.commons.math3.util.FastMath the new methods introduced by Java 8 in
+# java.lang.StrictMath. This patch disables the unit test checking that all
+# StrictMath methods are reimplemented in commons-math
+# TODO: drop this patch once commons-math fully supports Java 8
+Patch1:           %{name}-3.2-JDK8.patch
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
@@ -20,6 +29,7 @@ Commons Math is a library of lightweight, self-contained mathematics and
 statistics components addressing the most common problems not available in the
 Java programming language or Commons Lang.
 
+
 %package javadoc
 Summary:          Javadoc for %{name}
 Group:            Documentation
@@ -27,26 +37,40 @@ Group:            Documentation
 %description javadoc
 This package contains the API documentation for %{name}.
 
+
 %prep
 %setup -q -n %{short_name}-%{version}-src
+%patch0 -p1 -b .RHBZ1084441
+%patch1 -p1 -b .JDK8
 
 # Compatibility links
 %mvn_alias "org.apache.commons:%{short_name}" "%{short_name}:%{short_name}"
 %mvn_file :%{short_name} %{short_name} %{name}
 
+
 %build
 %mvn_build
+
 
 %install
 %mvn_install
 
+
 %files -f .mfiles
 %doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
+
 
 %files javadoc -f .mfiles-javadoc
 %doc LICENSE.txt NOTICE.txt
 
+
 %changelog
+* Wed Apr 23 2014 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.2-4
+- Fix RHBZ #1084441 (see
+  https://issues.apache.org/jira/browse/MATH-1057)
+- Disable unit test checking that all StrictMath methods are reimplemented in
+  commons-math
+
 * Fri Mar 28 2014 Michael Simacek <msimacek@redhat.com> - 3.2-4
 - Use Requires: java-headless rebuild (#1067528)
 
