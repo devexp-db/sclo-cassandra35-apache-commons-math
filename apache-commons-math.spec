@@ -1,22 +1,13 @@
 %global short_name commons-math3
 
 Name:             apache-commons-math
-Version:          3.2
-Release:          5%{?dist}
+Version:          3.3
+Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
 URL:              http://commons.apache.org/math/
 Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%{version}-src.tar.gz
-# Fix RHBZ #1084441 (Fix BOBYQAOptimizerTest failing tests; see also
-# https://issues.apache.org/jira/browse/MATH-1057)
-Patch0:           %{name}-3.2-RHBZ1084441.patch
-# commons-math doesn't reimplement (yet) in
-# org.apache.commons.math3.util.FastMath the new methods introduced by Java 8 in
-# java.lang.StrictMath. This patch disables the unit test checking that all
-# StrictMath methods are reimplemented in commons-math
-# TODO: drop this patch once commons-math fully supports Java 8
-Patch1:           %{name}-3.2-JDK8.patch
 
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
@@ -40,12 +31,14 @@ This package contains the API documentation for %{name}.
 
 %prep
 %setup -q -n %{short_name}-%{version}-src
-%patch0 -p1 -b .RHBZ1084441
-%patch1 -p1 -b .JDK8
 
 # Compatibility links
 %mvn_alias "org.apache.commons:%{short_name}" "%{short_name}:%{short_name}"
 %mvn_file :%{short_name} %{short_name} %{name}
+
+# Disable Jacoco Maven plugin until a suitable version is available in Fedora
+# (0.7.0)
+rm src/site/resources/profile.jacoco
 
 
 %build
@@ -65,6 +58,11 @@ This package contains the API documentation for %{name}.
 
 
 %changelog
+* Fri Jun 13 2014 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.3-1
+- Update to 3.3
+- Drop apache-commons-math-3.2-RHBZ1084441.patch (fixed in 3.3)
+- Drop apache-commons-math-3.2-JDK8.patch (Java 8 support enabled in 3.3)
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.2-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
