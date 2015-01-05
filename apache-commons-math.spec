@@ -1,7 +1,7 @@
 %global short_name commons-math3
 
 Name:             apache-commons-math
-Version:          3.3
+Version:          3.4
 Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
@@ -12,6 +12,9 @@ Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
 BuildRequires:    maven-local
+%if 0%{?fedora} >= 21
+BuildRequires:    mvn(org.jacoco:jacoco-maven-plugin) >= 0.7.0
+%endif
 Requires:         jpackage-utils
 BuildArch:        noarch
 
@@ -36,9 +39,13 @@ This package contains the API documentation for %{name}.
 %mvn_alias "org.apache.commons:%{short_name}" "%{short_name}:%{short_name}"
 %mvn_file :%{short_name} %{short_name} %{name}
 
-# Disable Jacoco Maven plugin until a suitable version is available in Fedora
-# (0.7.0)
+# Disable Jacoco Maven plugin for Fedora releases having jacoco < 0.7.0
+%if 0%{?fedora} < 21
 rm src/site/resources/profile.jacoco
+%endif
+
+# Disable maven-jgit-buildnumber-plugin plugin (not available in Fedora)
+%pom_remove_plugin ru.concerteza.buildnumber:maven-jgit-buildnumber-plugin
 
 
 %build
@@ -58,6 +65,9 @@ rm src/site/resources/profile.jacoco
 
 
 %changelog
+* Mon Jan 05 2015 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.4-1
+- Update to 3.4
+
 * Fri Jun 13 2014 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.3-1
 - Update to 3.3
 - Drop apache-commons-math-3.2-RHBZ1084441.patch (fixed in 3.3)
