@@ -1,7 +1,7 @@
 %global short_name commons-math3
 
 Name:             apache-commons-math
-Version:          3.4
+Version:          3.4.1
 Release:          1%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
@@ -12,6 +12,7 @@ Source0:          http://www.apache.org/dist/commons/math/source/%{short_name}-%
 BuildRequires:    java-devel >= 1:1.6.0
 BuildRequires:    jpackage-utils
 BuildRequires:    maven-local
+
 %if 0%{?fedora} >= 21
 BuildRequires:    mvn(org.jacoco:jacoco-maven-plugin) >= 0.7.0
 %endif
@@ -65,6 +66,9 @@ rm src/site/resources/profile.jacoco
 
 
 %changelog
+* Tue Jan 13 2015 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.4.1-1
+- Update to 3.4.1
+
 * Mon Jan 05 2015 Mohamed El Morabity <melmorabity@fedoraproject.org> - 3.4-1
 - Update to 3.4
 
