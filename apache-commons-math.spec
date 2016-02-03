@@ -2,7 +2,7 @@
 
 Name:             apache-commons-math
 Version:          3.4.1
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
@@ -66,6 +66,9 @@ rm src/site/resources/profile.jacoco
 
 
 %changelog
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 3.4.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.4.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
