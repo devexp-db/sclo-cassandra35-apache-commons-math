@@ -5,7 +5,7 @@
 
 Name:             %{?scl_prefix}apache-commons-math
 Version:          3.4.1
-Release:          2%{?dist}
+Release:          3%{?dist}
 Summary:          Java library of lightweight mathematics and statistics components
 Group:            Development/Libraries
 License:          ASL 1.1 and ASL 2.0 and BSD
@@ -46,7 +46,8 @@ This package contains the API documentation for %{name}.
 %mvn_file :%{short_name} %{short_name} %{pkg_name}
 
 # Disable Jacoco Maven plugin for Fedora releases having jacoco < 0.7.0
-%if 0%{?fedora} < 21 || 0%{?scl}
+%if 0%{?fedora} >= 21
+%else 
 rm src/site/resources/profile.jacoco
 %endif
 
@@ -61,12 +62,11 @@ rm src/site/resources/profile.jacoco
 %pom_remove_plugin org.apache.maven.plugins:maven-surefire-plugin
 %pom_remove_plugin org.apache.maven.plugins:maven-javadoc-plugin
 
-
 %{?scl_disable}
 
 %build
 %{?scl_enable}
-%mvn_build
+%mvn_build -- -Dproject.build.sourceEncoding=UTF-8
 %{?scl_disable}
 
 %install
@@ -81,6 +81,9 @@ rm src/site/resources/profile.jacoco
 %doc LICENSE.txt NOTICE.txt
 
 %changelog
+* Mon Aug 01 2016 Tomas Repik <trepik@redhat.com> - 3.4.1-3
+- set up source encoding during build
+
 * Wed Jul 27 2016 Tomas Repik <trepik@redhat.com> - 3.4.1-2
 - removed parent, added missing dependencies
 
